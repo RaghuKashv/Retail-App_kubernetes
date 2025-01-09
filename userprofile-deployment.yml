@@ -16,28 +16,25 @@ spec:
       - name: usernode-js
         image: saiteja2502/userprofileretail:latest
         ports:
-        - containerPort: 3130  # Change to match your app's port
+        - containerPort: 3130  # Ensure this matches the app's exposed port
         env:
         - name: MONGODB_URI
-          value: "mongodb://mongodb:27017/myDatabase"  # Match this to your MongoDB deployment
-        - name: SESSION_SECRET
-          value: "1234"
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secrets
+              key: MONGODB_URI
         - name: EMAIL_USER
-          value: "chagantyteja2502@gmail.com"
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secrets
+              key: EMAIL_USER
         - name: EMAIL_PASS
-          value: "yxoq bjuk rdnt alzp"
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secrets
+              key: EMAIL_PASS
         - name: PORT
-          value: "3130"
---- 
-apiVersion: v1
-kind: Service
-metadata:
-  name: usernode-js-service
-spec:
-  type: LoadBalancer  # Use NodePort if LoadBalancer is not supported
-  ports:
-    - port: 3130
-      targetPort: 3130
-      protocol: TCP
-  selector:
-    app: userprofile
+          valueFrom:
+            secretKeyRef:
+              name: my-app-secrets
+              key: PORT
