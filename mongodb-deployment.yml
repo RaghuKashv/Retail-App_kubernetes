@@ -23,16 +23,5 @@ spec:
             secretKeyRef:
               name: my-app-secrets
               key: MONGO_INITDB_DATABASE 
---- 
-apiVersion: v1
-kind: Service
-metadata:
-  name: mongodb
-spec:
-  selector:
-    app: mongodb
-  ports:
-    - port: 27017
-      targetPort: 27017
-      protocol: TCP
+
 

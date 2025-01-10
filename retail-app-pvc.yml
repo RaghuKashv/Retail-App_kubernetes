@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: retail-app-pvc  # Name of the PVC
+spec:
+  accessModes:
+    - ReadWriteOnce  # The access mode (ReadWriteOnce, ReadOnlyMany, or ReadWriteMany)
+  resources:
+    requests:
+      storage: 10Gi  # Requested storage size
+  storageClassName: retail-azure-disk-sc  # The name of the StorageClass to use (this refers to the one you created above)

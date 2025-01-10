@@ -12,29 +12,41 @@ spec:
       labels:
         app: userprofile
     spec:
+      initContainers:
+        - name: init-front-app
+          image: busybox:1.35.0-uclibc
+          command: ['sh', '-c', 'echo "Running initialization tasks for the front-end application"; sleep 10;']
       containers:
-      - name: usernode-js
-        image: saiteja2502/userprofileretail:latest
-        ports:
-        - containerPort: 3130  # Ensure this matches the app's exposed port
-        env:
-        - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: my-app-secrets
-              key: MONGODB_URI
-        - name: EMAIL_USER
-          valueFrom:
-            secretKeyRef:
-              name: my-app-secrets
-              key: EMAIL_USER
-        - name: EMAIL_PASS
-          valueFrom:
-            secretKeyRef:
-              name: my-app-secrets
-              key: EMAIL_PASS
-        - name: PORT
-          valueFrom:
-            secretKeyRef:
-              name: my-app-secrets
-              key: PORT
+        - name: usernode-js
+          image: saiteja2502/userprofileretail:latest
+          ports:
+            - containerPort: 3130
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: MONGODB_URI
+            - name: EMAIL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: EMAIL_USER
+            - name: EMAIL_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: EMAIL_PASS
+            - name: PORT
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secrets
+                  key: PORT
+          volumeMounts:
+            - name: retail-azure-disk-sc
+              mountPath: /app/data   # Adjust the mount path where you want to store data in the container
+      volumes:
+        - name: retail-azure-disk-sc
+          persistentVolumeClaim:
+            claimName: retail-app-pvc
+      restartPolicy: Always

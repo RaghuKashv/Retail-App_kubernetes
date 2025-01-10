@@ -1,0 +1,10 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: retail-azure-disk-sc  # Name of the StorageClass
+provisioner: disk.csi.azure.com  # CSI provisioner for Azure Disks
+parameters:
+  storageAccountType: Standard_LRS  # Type of Azure Storage Account, e.g., Standard_LRS
+  kind: Managed  # Managed Disk type
+reclaimPolicy: Retain  # Retain the volume even after the PVC is deleted
+volumeBindingMode: WaitForFirstConsumer  # Volume binding mode to delay until the pod is scheduled
